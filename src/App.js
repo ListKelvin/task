@@ -1,25 +1,32 @@
-import logo from './logo.svg';
-import './App.css';
+import { Routes, Route } from 'react-router-dom';
+import { createContext, useState } from "react";
+import Home from './routes/home/home.component';
+import Todolist from './routes/todolist/Todolist'
+import Navigation from './routes/navigation/Navigation.component'
+import Login from './routes/login-page/Login'
+import Protect from './Protect';
+const Shop = () => {
+  return <h1>I am the shop page</h1>;
+};
 
-function App() {
+export const UserContext = createContext();
+
+const App = () => {
+  const [user,setUser] = useState({ loggedIn: false})
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <UserContext.Provider value={{ user, setUser }}>
+    <Routes>
+      <Route  path='/' element={<Login/>}/>
+      <Route  element={<Protect/> } >
+        <Route path='/home' element={<Navigation/>}>
+          <Route index  element={<Home />}/>
+          <Route path='shop' element={<Shop />} />
+          <Route path='todo' element={<Todolist />}/>
+        </Route>
+      </Route>
+    </Routes>
+    </UserContext.Provider>
   );
-}
+};
 
 export default App;
